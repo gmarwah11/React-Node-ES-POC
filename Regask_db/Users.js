@@ -16,34 +16,4 @@ con.connect(function(err) {
       console.log("UsersTable created");
     });
   });
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// con.connect(function(err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-//     con.query("CREATE DATABASE Regax_db", function (err, result) {
-//       if (err) throw err;
-//       console.log("Database created");
-//     });
-//   })
+ 
