@@ -24,7 +24,16 @@ if(!isProduction){
     app.use(errorHandler());
 }
 // Mongoose configure
-
+const MSQLAADB = require('./db/common/connection');
+const USERSCRUD = require('./db/dbOperation/userOperation');
+var FindUserObj;
+// async function FINDUSER(){
+//    return await USERSCRUD.FindUserByEmailID('jatin345anand@gmail.com');   
+// }
+// FindUserObj = USERSCRUD.FindUserByEmailID('jatin345anand@gmail.com');
+// console.log('Find USer',FindUserObj); 
+// FindUserObj.then((success)=>{console.log('in success',success)},(error)=>{console.log(error)});
+// USERSCRUD.DeleteUser('userId','9');
 // Model and Routes
 require('./models/user/userOperation');
 require('./config/passportLocal');
