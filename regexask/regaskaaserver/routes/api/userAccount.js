@@ -28,7 +28,7 @@ router.post('/add', auth.required, (req, res, next) => {
     if (!user.lname) {
         return res.status(422).json({
             errors: {
-                message: 'Please fill out this field.' ,
+                message: 'Please fill out this field.',
             },
         });
     }
@@ -67,8 +67,7 @@ router.post('/add', auth.required, (req, res, next) => {
     console.log('Hash code ', hashCode);
     let salt = (USERAUTHOPERATIONS.setPasswordHashnSalt(password).salt).toString();
     console.log('Salt ', salt);
-    // const today = new Date();
-    // let date = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate() + '';
+
     let roleId = req.body.user.roleId;
     console.log('Role ID ', roleId);
     let company = req.body.user.company;
@@ -144,38 +143,44 @@ router.post('/login', auth.optional, (req, res, next) => {
             let OutputAddUserToken = USERAUTHOPERATIONS.toAuthJSON(emaiId);
             OutputAddUserToken.message = "Your emailID and Temporary Password is Correct. Please create new Password";
             console.log('Log in Successfully ', OutputAddUserToken);
-            return res.status(302).send(OutputAddUserToken);
+            return res.status(301).send(OutputAddUserToken);
         });
     }
-    this.SQLQuery = `SELECT * FROM Users WHERE emailId = '${emaiId}';`
-    console.log(this.SQLQuery);
-    MYSQLREGASKAADB.query(this.SQLQuery, (err, result) => {
-        if (err) {
-            return res.status(400).send({ message: 'Something went wrong. Please try again.' });
-        }
-        console.log('Users Row Find!!', result[0]);
-        this.USEROBJ = result[0];
-        if (!result[0] || !USERAUTHOPERATIONS.validatePassword(password, result[0].hashCode, result[0].salt)) {
-            return res.status(400).send({ message: 'The email or password you entered is incorrect. Please try again.' });
-        }
-        let ActiveQuery = `UPDATE users SET active = true WHERE emailId = '${emaiId}';`
-        MYSQLREGASKAADB.query(ActiveQuery, (e, r) => {
+    else {
+        const today = new Date();
+        let date = today.getFullYear() + "-" + (today.getMonth()+1)  + "-" + today.getDate() + '';
+        this.SQLQuery = `SELECT * FROM Users WHERE emailId = '${emaiId}';`
+        console.log(this.SQLQuery);
+        MYSQLREGASKAADB.query(this.SQLQuery, (err, result) => {
             if (err) {
                 return res.status(400).send({ message: 'Something went wrong. Please try again.' });
             }
-            let OutputAddUserToken = USERAUTHOPERATIONS.toAuthJSON(emaiId);
-
-            if (r.changedRows == 0) {
-                OutputAddUserToken.message = "Your emailID and Temporary Password is Correct. You can not redirect to HOME.";
-                console.log('Log in Successfully ', OutputAddUserToken);
-                return res.status(200).send(OutputAddUserToken);
+            console.log('Users Row Find!!', result[0]);
+            this.USEROBJ = result[0];
+            if (!result[0] || !USERAUTHOPERATIONS.validatePassword(password, result[0].hashCode, result[0].salt)) {
+                return res.status(400).send({ message: 'The email or password you entered is incorrect. Please try again.' });
             }
-            OutputAddUserToken.message = "Your emailID and Updated Password is Correct. Please redirect to HOME.";
-            console.log('Log in Successfully ', OutputAddUserToken);
-            return res.status(200).send(OutputAddUserToken);
-        })
+            let ActiveQuery = `UPDATE users SET lastLogin = '${date}',active = true WHERE emailId = '${emaiId}';`
+            console.log('Final Login Query ',ActiveQuery);
+            MYSQLREGASKAADB.query(ActiveQuery, (e, r) => {
+                if (err) {
+                    return res.status(400).send({ message: 'Something went wrong. Please try again.' });
+                }
+                let OutputAddUserToken = USERAUTHOPERATIONS.toAuthJSON(emaiId);
+                console.log('result ',r);   
+                if (r.changedRows == 0) {
+                    OutputAddUserToken.message = "Your emailID and Temporary Password is Correct. You can not redirect to HOME.";
+                    console.log('Log in Successfully ', OutputAddUserToken);
+                    return res.status(301).send(OutputAddUserToken);
+                }
+                OutputAddUserToken.message = "Your emailID and Updated Password is Correct. Please redirect to HOME.";
+                console.log('Log in Successfully ', OutputAddUserToken);
+                return res.status(301).send(OutputAddUserToken);
+            });
 
-    });
+        });
+    }
+
 });
 router.post('/createPassword', auth.required, (req, res, next) => {
     console.log('req in create PAssword', req.body);
@@ -322,7 +327,7 @@ router.post('/delete', auth.required, (req, res, next) => {
             }
             console.log('Delete ', r);
             OutputAddUserToken.message = "Delete Unsuccessfully";
-            if (r.changedRows > 0) {
+            if (r.affectedRows > 0) {
                 OutputAddUserToken.message = "Delete Successfully";
             }
             console.log('Delete Successfully ', OutputAddUserToken);
@@ -380,14 +385,14 @@ router.post('/deactivate', auth.required, (req, res, next) => {
             // console.error('error connecting: ' + err.stack);
             return res.status(400).send({ message: 'Something went wrong. Please try again.' });
         }
-        if(result == undefined){
-            return res.status(400).send({message:"You are unauthorized. You can not Deactivate User"});
+        if (result == undefined) {
+            return res.status(400).send({ message: "You are unauthorized. You can not Deactivate User" });
         }
         let deactivateQuery = `UPDATE users SET active = false WHERE emailId = '${deactivateEmailID}';`
-        
-        MYSQLREGASKAADB.query(deactivateQuery,(e,r)=>{
+
+        MYSQLREGASKAADB.query(deactivateQuery, (e, r) => {
             if (e) {
-                 return res.status(400).send({ message: 'Something went wrong. Please try again.' });
+                return res.status(400).send({ message: 'Something went wrong. Please try again.' });
             }
             let OutputAddUserToken = {};
             console.log('affected row', r.changedRows);
@@ -402,8 +407,8 @@ router.post('/deactivate', auth.required, (req, res, next) => {
 
             return res.status(200).send(OutputAddUserToken);
         });
-        
-        
+
+
     });
 
 });
