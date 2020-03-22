@@ -1,0 +1,23 @@
+body{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+}
+
+#b{
+    position: absolute;
+ background-color: #FFFFFF;
+ width: 1337px;
+ height: auto;
+ display: flex;
+ border: 1px solid black;
+}
+#a1{ 
+    top: 333px;
+    left: 601px;
+    width: 718px;
+    height: 414px;
+    background: transparent url('src/assets/changepassword/changepassword.png') 0% 0% no-repeat padding-box;
+    box-shadow: 4px 4px 10px #00000029;
+    border-radius: 8px;
+    opacity:1}

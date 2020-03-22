@@ -1,0 +1,78 @@
+body{
+    padding: 0%;
+    margin: 0%;
+   
+}
+#logo{
+    top: 307px;
+    left: 188px;
+    width: 170px;
+    height: 49px;
+    opacity: 1;
+    position: absolute;
+}
+#r{
+    top: 524px;
+left: 278px;
+width: 31px;
+height: 36px;
+background: #002B49 0% 0% no-repeat padding-box;
+opacity: 1;
+}
+
+
+
+
+#b{
+
+
+
+ 
+    height: 1080px;
+    display: flex;
+ background-color: #FFFFFF;
+ width: 1337px;
+
+}
+#b1{ 
+    top: 333px;
+    left: 601px;
+    width: 718px;
+    height: 414px;
+    background: transparent url('src/assets/changepassword/changepassword.png') 0% 0% no-repeat padding-box;
+    box-shadow: 4px 4px 10px #00000029;
+    border-radius: 8px;
+    opacity: 1;
+}
+#b2{
+    top: -0.4218902587890625px;
+    left: 626px;
+    width: 1294px;
+    height: 1080px;
+    background: transparent url('src/assets/changepassword/changepasswordright.png') 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+.li{
+    list-style:square;
+    color:#022B49 ;
+ }
+ .input {
+    width: 250px;
+
+
+  }
+
+  #icon{
+    background-image:url(./userr.png); 
+    background-repeat: no-repeat; 
+    background-position: 1px 1px;
+    }
+
+    #iconn{
+        background-image:url(./pasword.png); 
+        background-repeat: no-repeat; 
+        background-position: 1px 1spx;
+        }
+
+
+      
